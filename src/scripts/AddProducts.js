@@ -1,0 +1,166 @@
+// src/scripts/AddProducts.js
+import { collection, addDoc, getDocs, writeBatch } from "firebase/firestore";
+import { db } from "../firebase";
+
+const products = [
+  { 
+    id: 1, 
+    name: "Парацетамол-Дарниця", 
+    price: 85, 
+    category: "Знеболюючі", 
+    sub: "500 мг, 10 таблеток", 
+    image: "paracetamol.jpg", 
+    desc: "Ефективний засіб для зниження температури та болю." 
+  },
+  { 
+    id: 2, 
+    name: "Ібупрофен-Дарниця", 
+    price: 120, 
+    category: "Знеболюючі", 
+    sub: "200 мг, 20 таблеток", 
+    image: "ibuprofen.jpg", 
+    desc: "Протизапальний засіб для дорослих та дітей." 
+  },
+  { 
+    id: 3, 
+    name: "CeraVe Hydrating Gel", 
+    price: 890, 
+    category: "Доглядова косметика", 
+    sub: "236 мл", 
+    image: "cerave.jpg", 
+    desc: "Зволожувальний гель для очищення обличчя." 
+  },
+  { 
+    id: 4, 
+    name: "Vichy Liftactiv", 
+    price: 1250, 
+    category: "Доглядова косметика", 
+    sub: "15 мл", 
+    image: "krem-vichy.jpg", 
+    desc: "Догляд за шкірою навколо очей." 
+  },
+  { 
+    id: 5, 
+    name: "Vichy Dercos", 
+    price: 1450, 
+    category: "Доглядова косметика", 
+    sub: "100 мл", 
+    image: "dercos.jpg", 
+    desc: "Концентрат для густоти волосся." 
+  },
+  { 
+    id: 6, 
+    name: "Аспірин", 
+    price: 95, 
+    category: "Знеболюючі", 
+    sub: "500 мг", 
+    image: "aspiryn.jpg", 
+    desc: "Класичний засіб при застуді." 
+  },
+  { 
+    id: 7, 
+    name: "Цитрамон-Екстра", 
+    price: 70, 
+    category: "Знеболюючі", 
+    sub: "10 таблеток", 
+    image: "cytramon.jpg", 
+    desc: "Допомога при головному болю." 
+  },
+  // Анальгін видалено
+  { 
+    id: 9, 
+    name: "Лоратадин-Дарниця", 
+    price: 65, 
+    category: "Алергія", 
+    sub: "10 таблеток", 
+    image: "loratadyn.jpg", 
+    desc: "Засіб проти алергії тривалої дії." 
+  },
+  { 
+    id: 10, 
+    name: "Терафлю", 
+    price: 210, 
+    category: "Від застуди", 
+    sub: "4 пакетики", 
+    image: "teraflu.jpg", 
+    desc: "Гарячий напій проти симптомів грипу та застуди." 
+  },
+  { 
+    id: 11, 
+    name: "Діазолін-Дарниця", 
+    price: 55, 
+    category: "Алергія", 
+    sub: "100 мг, 10 таблеток", 
+    image: "diazolin.jpg", 
+    desc: "Класичний антигістамінний засіб." 
+  },
+  { 
+    id: 12, 
+    name: "Амоксиклав", 
+    price: 420, 
+    category: "Антибіотики", 
+    sub: "1000 мг/200 мг", 
+    image: "amoksyklav.jpg", 
+    desc: "Комбінований антибактеріальний препарат." 
+  },
+  { 
+    id: 13, 
+    name: "Omega 3-6-9 Solgar", 
+    price: 1100, 
+    category: "Вітаміни", 
+    sub: "120 капсул", 
+    image: "omega.jpg", 
+    desc: "Підтримка серця, суглобів та шкіри." 
+  },
+  { 
+    id: 14, 
+    name: "Нокспрей Актив", 
+    price: 145, 
+    category: "Нежить", 
+    sub: "10 мл, спрей", 
+    image: "noksprej.jpg", 
+    desc: "Полегшує дихання через ніс при застуді." 
+  },
+  { 
+    id: 15, 
+    name: "La Roche-Posay Toleriane", 
+    price: 980, 
+    category: "Доглядова косметика", 
+    sub: "40 мл", 
+    image: "laroshe.jpg", 
+    desc: "Заспокійливий крем для чутливої шкіри." 
+  }
+];
+
+const addAllProducts = async () => {
+  console.clear();
+
+  console.log("🧹 Очищаємо базу даних...");
+
+  const snapshot = await getDocs(collection(db, "products"));
+  const batch = writeBatch(db);
+
+  snapshot.docs.forEach((doc) => batch.delete(doc.ref));
+  await batch.commit();
+
+  console.log(`✅ Очищено ${snapshot.docs.length} товарів`);
+
+  console.log("🚀 Додаємо 14 товарів...");
+
+  const colRef = collection(db, "products");
+  let count = 0;
+
+  for (const product of products) {
+    try {
+      await addDoc(colRef, product);
+      count++;
+      console.log(`✅ Додано: ${product.name}`);
+    } catch (error) {
+      console.error(`❌ Помилка з ${product.name}:`, error);
+    }
+  }
+
+  console.log(`🎉 Успішно додано ${count} товарів!`);
+};
+
+export default addAllProducts;

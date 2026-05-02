@@ -1,0 +1,237 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+:root {
+  --deep-green: #1a4332;
+  --autumn-red: #bc544b;
+  --cream-bg: #fdfaf5;
+  --white: #ffffff;
+  --text-dark: #132f23;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background-color: var(--cream-bg);
+  color: var(--text-dark);
+}
+
+.navbar-custom {
+  background-color: var(--deep-green) !important;
+  padding: 1rem 0;
+}
+
+.product-card {
+  border: none !important;
+  border-radius: 20px !important;
+  transition: 0.3s;
+  background: var(--white);
+  overflow: hidden;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(26, 67, 50, 0.1) !important;
+}
+
+.btn-accent {
+  background-color: var(--autumn-red) !important;
+  border: none !important;
+  border-radius: 10px !important;
+  color: white !important;
+}
+
+/* Адаптація для телефонів */
+@media (max-width: 768px) {
+  .search-stack { flex-direction: column !important; }
+  .search-stack > * { width: 100% !important; }
+  .display-5 { font-size: 1.8rem; text-align: center; }
+}
+/* --- GLOBAL --- */
+body {
+  background-color: #ffffff;
+  color: #132f23;
+  font-family: 'Inter', sans-serif;
+}
+
+/* --- HOVER EFFECT (твій + прокачка) --- */
+.transition-hover {
+  transition: all 0.3s ease;
+}
+.transition-hover:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+}
+
+/* --- HERO --- */
+.hero-section {
+  background: linear-gradient(135deg, #f4f7f5, #ffffff);
+  padding: 80px 0;
+}
+
+.hero-title {
+  font-size: 3rem;
+  font-weight: 800;
+  margin: 20px 0;
+  line-height: 1.1;
+}
+
+.hero-title span {
+  color: #6c757d;
+}
+
+.hero-text {
+  color: #6c757d;
+  max-width: 500px;
+  margin-bottom: 30px;
+}
+
+.hero-btn {
+  background: #1a4332;
+  border: none;
+  padding: 14px 32px;
+  font-weight: 600;
+  border-radius: 0;
+  transition: 0.3s;
+}
+
+.hero-btn:hover {
+  background: #132f23;
+  transform: translateY(-2px);
+}
+
+.hero-img {
+  max-height: 450px;
+  filter: drop-shadow(20px 40px 50px rgba(0,0,0,0.08));
+  transition: 0.5s;
+}
+
+.hero-img:hover {
+  transform: scale(1.05);
+}
+
+/* --- VALUES --- */
+.values-section {
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+  padding: 25px 0;
+}
+
+.value-item {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  font-weight: 500;
+}
+
+.value-item svg {
+  color: #1a4332;
+}
+
+/* --- PRODUCTS --- */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  margin-bottom: 40px;
+}
+
+.view-all {
+  color: #1a4332;
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px solid #1a4332;
+}
+
+.product-card-new {
+  border: none;
+  border-radius: 16px;
+  overflow: hidden;
+  transition: 0.3s;
+}
+
+.product-card-new:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+}
+
+.product-img {
+  height: 320px;
+  background: #f7f7f7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.product-img img {
+  max-height: 100%;
+  transition: 0.4s;
+}
+
+.product-card-new:hover img {
+  transform: scale(1.08);
+}
+
+.brand-badge {
+  background: #132f23;
+  margin-bottom: 10px;
+}
+
+.desc {
+  color: #777;
+  font-size: 14px;
+}
+
+.product-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px;
+}
+
+.price {
+  color: #bc544b;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.details-btn {
+  border: 1px solid #132f23;
+  background: transparent;
+  color: #132f23;
+  transition: 0.3s;
+}
+
+.details-btn:hover {
+  background: #132f23;
+  color: white;
+}
+
+/* --- PROMO --- */
+.promo-section {
+  background: linear-gradient(135deg, #132f23, #1a4332);
+  padding: 80px 0;
+}
+
+.promo-btn {
+  background: white;
+  color: #1a4332;
+  border: none;
+  padding: 12px 30px;
+  margin-top: 20px;
+  transition: 0.3s;
+}
+
+.promo-btn:hover {
+  transform: translateY(-2px);
+}
+
+/* --- SMALL POLISH --- */
+button {
+  transition: all 0.2s ease;
+}
+
+img {
+  user-select: none;
+}
