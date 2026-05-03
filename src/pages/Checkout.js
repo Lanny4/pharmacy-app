@@ -95,7 +95,7 @@ const Checkout = () => {
       </div>
 
       <Row>
-        {/* Ліва частина - форма доставки */}
+        {/* ліва частина - форма доставки */}
         <Col lg={7}>
           <Card className="shadow-sm border-0 rounded-4 p-4">
             <h4 className="mb-4 fw-bold">Інформація про доставку</h4>

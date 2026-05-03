@@ -1,55 +1,16 @@
 // src/pages/Profile.js
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Container, Row, Col, Card, Button, Spinner, Badge } from 'react-bootstrap';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
-import { collection, query, where, getDocs } from 'firebase/firestore';
-import { db } from '../firebase';
 import { Link } from 'react-router-dom';
 import { FiUser, FiShoppingBag, FiLogOut, FiMapPin, FiCalendar } from 'react-icons/fi';
+import { useOrders } from '../hooks/useOrders';
 
 const Profile = () => {
   const { currentUser, logout } = useAuth();
   const { clearCart } = useCart();
-  const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchUserOrders = async () => {
-      if (!currentUser?.uid) {
-        setLoading(false);
-        return;
-      }
-
-      try {
-        const q = query(
-          collection(db, "orders"),
-          where("userId", "==", currentUser.uid)
-        );
-
-        const snapshot = await getDocs(q);
-
-        const userOrders = snapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data(),
-          createdAt: doc.data().createdAt?.toDate ? 
-                    doc.data().createdAt.toDate() : 
-                    new Date(doc.data().createdAt || Date.now())
-        }));
-
-        // Сортуємо новіші зверху
-        userOrders.sort((a, b) => b.createdAt - a.createdAt);
-
-        setOrders(userOrders);
-      } catch (err) {
-        console.error("Помилка завантаження замовлень:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUserOrders();
-  }, [currentUser]);
+  const { orders, loading, error } = useOrders();
 
   const handleLogout = async () => {
     try {
@@ -96,6 +57,10 @@ const Profile = () => {
             <div className="text-center py-5">
               <Spinner animation="border" variant="success" />
             </div>
+          ) : error ? (
+            <Card className="text-center p-5 shadow-sm border-0 rounded-4">
+              <p className="text-danger">Помилка: {error}</p>
+            </Card>
           ) : orders.length === 0 ? (
             <Card className="text-center p-5 shadow-sm border-0 rounded-4">
               <FiShoppingBag size={80} className="text-muted mx-auto mb-4" />

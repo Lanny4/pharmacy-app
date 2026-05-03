@@ -1,194 +1,124 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --deep-green: #1a4332;   /* Хвойний */
-  --autumn-red: #bc544b;    /* Теракотовий */
-  --cream-bg: #fdfaf5;     /* Кремовий */
-  --text-dark: #2c2c2c;
+  --deep-green: #1a4332;
+  --accent-red: #bc544b;
+  --light-bg: #f9f9f7;
+  --text-dark: #132f23;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 body {
   margin: 0;
   font-family: 'Inter', sans-serif;
-  background-color: var(--cream-bg);
+  background-color: var(--light-bg);
   color: var(--text-dark);
+  line-height: 1.6;
 }
 
-/* Навігація */
-.navbar {
+/* навбар */
+.navbar-custom {
   background-color: var(--deep-green) !important;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  padding-top: env(safe-area-inset-top);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.navbar-brand {
-  font-weight: 700;
-  letter-spacing: 0.5px;
+.navbar-brand span {
+  color: var(--accent-red);
 }
 
-/* Картки товарів */
-.card {
-  border: none !important;
-  border-radius: 20px !important;
+/* картки товарів */
+.product-card {
+  transition: all 0.3s ease;
+  border-radius: 16px;
   overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  border: none;
+  height: 100%;
 }
 
-.card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 15px 35px rgba(26, 67, 50, 0.15) !important;
-}
-
-/* Кнопки */
-.btn-success {
-  background-color: var(--autumn-red) !important;
-  border: none !important;
-  border-radius: 12px !important;
-  padding: 10px 20px !important;
-  font-weight: 600 !important;
-  transition: 0.3s !important;
-}
-
-.btn-success:hover {
-  background-color: #a3463e !important;
-  transform: scale(1.02);
-}
-
-.btn-outline-light {
-  border-radius: 10px;
-  border-width: 2px;
-}
-
-/* Стилізація таблиці кошика */
-.table {
-  background: white;
-  border-radius: 15px;
-  overflow: hidden;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+.product-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(26, 67, 50, 0.15) !important;
 }
 
 .card-image {
   height: 200px;
-  object-fit: cover;
-  transition: transform 0.6s ease;
-}
-
-.product-card:hover .card-image {
-  transform: scale(1.1);
-}
-
-.product-card {
-  transition: all 0.3s ease;
-  background-color: #fff;
-}
-
-/* Красивий скролбар для категорій на мобільних */
-.scrollbar-hidden {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
-}
-.scrollbar-hidden::-webkit-scrollbar {
-  display: none; /* Chrome, Safari and Opera */
-}
-
-/* Стиль для активної категорії */
-.btn-success {
-    box-shadow: 0 4px 15px rgba(26, 67, 50, 0.2);
-}
-
-/* HealthCare Custom Styles */
-.card-img-top {
-  height: 240px;
-  object-fit: cover;
+  object-fit: contain;
   transition: transform 0.4s ease;
 }
 
-.product-card:hover .card-img-top {
+.product-card:hover .card-image {
   transform: scale(1.08);
 }
 
-.product-card {
-  border: none;
-  border-radius: 15px;
-  overflow: hidden;
-  transition: box-shadow 0.3s ease;
-}
-
-.product-card:hover {
-  box-shadow: 0 10px 25px rgba(26, 67, 50, 0.15) !important;
-}
-
+/* кнопки */
 .btn-success {
-  background-color: #bc544b !important; /* Наш теракотовий акцент */
+  background-color: var(--accent-red) !important;
   border: none !important;
+  font-weight: 600;
 }
 
 .btn-success:hover {
   background-color: #a3463e !important;
+  transform: translateY(-2px);
 }
 
-.scrollbar-hidden::-webkit-scrollbar {
-  display: none;
+/* футер */
+footer {
+  background-color: #132f23;
 }
 
-.product-card {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  border-radius: 12px;
+/* інш. стилі */
+.hover-card {
+  transition: all 0.4s ease;
 }
 
-.product-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+.hover-card:hover {
+  transform: translateY(-12px);
+  box-shadow: 0 25px 50px -12px rgba(26, 67, 50, 0.25) !important;
 }
 
-/* Анімація кошика при додаванні товару */
-.cart-icon.bump {
-  animation: bump 300ms ease-out;
+.rounded-4 {
+  border-radius: 16px !important;
+}
+
+.shadow-sm {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06) !important;
+}
+
+/* таблиця в кошику */
+.table {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+/* плейсхолдер для картинок */
+img[onerror] {
+  background-color: #f8f9fa;
+}
+
+/* анімація для кнопки додавання */
+.bump {
+  animation: bump 300ms ease;
 }
 
 @keyframes bump {
   0% { transform: scale(1); }
-  10% { transform: scale(1.2); }
-  30% { transform: scale(1.4); }
-  50% { transform: scale(1.2); }
+  50% { transform: scale(1.3); }
   100% { transform: scale(1); }
 }
 
-/* Красивий фон для сторінок */
-body {
-  background-color: #fdfbf7; /* Дуже світлий кремовий під Deep Autumn */
-}
-
-/* Стиль карток у каталозі */
-.product-card {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.product-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 20px 40px rgba(26, 67, 50, 0.1) !important;
-}
-
-.card-hover-effect:hover {
-  transform: translateY(-10px) scale(1.02); /* Картка піднімається та трохи збільшується */
-  box-shadow: 0 15px 30px rgba(19, 47, 35, 0.15) !important; /* Глибша, "м'яка" зеленувата тінь */
-}
-
-.hover-card {
-  transition: all 0.5s cubic-bezier(0.4, 0.0, 0.2, 1);
-}
-
-.hover-card:hover {
-  transform: translateY(-20px);
-  box-shadow: 0 35px 70px -20px rgba(26, 67, 50, 0.28) !important;
-}
-
-
-.hover-lift {
-  transition: all 0.4s ease;
-}
-
-.hover-lift:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 15px 35px rgba(26, 67, 50, 0.12) !important;
+/* Для мобільних */
+@media (max-width: 768px) {
+  .display-1 {
+    font-size: 2.8rem;
+  }
+  
+  .hero-section {
+    min-height: 85vh;
+  }
 }

@@ -1,4 +1,3 @@
-// src/scripts/AddProducts.js
 import { collection, addDoc, getDocs, writeBatch } from "firebase/firestore";
 import { db } from "../firebase";
 
@@ -66,9 +65,8 @@ const products = [
     image: "cytramon.jpg", 
     desc: "Допомога при головному болю." 
   },
-  // Анальгін видалено
   { 
-    id: 9, 
+    id: 8, 
     name: "Лоратадин-Дарниця", 
     price: 65, 
     category: "Алергія", 
@@ -77,7 +75,7 @@ const products = [
     desc: "Засіб проти алергії тривалої дії." 
   },
   { 
-    id: 10, 
+    id: 9, 
     name: "Терафлю", 
     price: 210, 
     category: "Від застуди", 
@@ -86,7 +84,7 @@ const products = [
     desc: "Гарячий напій проти симптомів грипу та застуди." 
   },
   { 
-    id: 11, 
+    id: 10, 
     name: "Діазолін-Дарниця", 
     price: 55, 
     category: "Алергія", 
@@ -95,7 +93,7 @@ const products = [
     desc: "Класичний антигістамінний засіб." 
   },
   { 
-    id: 12, 
+    id: 11, 
     name: "Амоксиклав", 
     price: 420, 
     category: "Антибіотики", 
@@ -104,7 +102,7 @@ const products = [
     desc: "Комбінований антибактеріальний препарат." 
   },
   { 
-    id: 13, 
+    id: 12, 
     name: "Omega 3-6-9 Solgar", 
     price: 1100, 
     category: "Вітаміни", 
@@ -113,7 +111,7 @@ const products = [
     desc: "Підтримка серця, суглобів та шкіри." 
   },
   { 
-    id: 14, 
+    id: 13, 
     name: "Нокспрей Актив", 
     price: 145, 
     category: "Нежить", 
@@ -122,7 +120,7 @@ const products = [
     desc: "Полегшує дихання через ніс при застуді." 
   },
   { 
-    id: 15, 
+    id: 14, 
     name: "La Roche-Posay Toleriane", 
     price: 980, 
     category: "Доглядова косметика", 
@@ -135,32 +133,34 @@ const products = [
 const addAllProducts = async () => {
   console.clear();
 
-  console.log("🧹 Очищаємо базу даних...");
+  try {
+    // Очищуємо стару колекцію
+    const snapshot = await getDocs(collection(db, "products"));
+    const batch = writeBatch(db);
 
-  const snapshot = await getDocs(collection(db, "products"));
-  const batch = writeBatch(db);
+    snapshot.docs.forEach((doc) => {
+      batch.delete(doc.ref);
+    });
 
-  snapshot.docs.forEach((doc) => batch.delete(doc.ref));
-  await batch.commit();
+    await batch.commit();
+    console.log(` Очищено ${snapshot.docs.length} старих товарів`);
 
-  console.log(`✅ Очищено ${snapshot.docs.length} товарів`);
+    console.log(" Додаємо оновлений список товарів...");
 
-  console.log("🚀 Додаємо 14 товарів...");
+    const colRef = collection(db, "products");
+    let successCount = 0;
 
-  const colRef = collection(db, "products");
-  let count = 0;
-
-  for (const product of products) {
-    try {
+    for (const product of products) {
       await addDoc(colRef, product);
-      count++;
-      console.log(`✅ Додано: ${product.name}`);
-    } catch (error) {
-      console.error(`❌ Помилка з ${product.name}:`, error);
+      successCount++;
+      console.log(` Додано: ${product.name}`);
     }
-  }
 
-  console.log(`🎉 Успішно додано ${count} товарів!`);
+    console.log(` Успішно додано ${successCount} товарів!`);
+
+  } catch (error) {
+    console.error(" Помилка:", error);
+  }
 };
 
 export default addAllProducts;

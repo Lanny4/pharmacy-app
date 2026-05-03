@@ -1,19 +1,21 @@
 import React from 'react';
 import { Container, Table, Button, Row, Col, Card } from 'react-bootstrap';
-import { useCart } from '../context/CartContext';
+import { useCart } from '../context/CartContext'; 
 import { Link } from 'react-router-dom';
 import { FiTrash2, FiShoppingBag, FiPlus, FiMinus } from 'react-icons/fi';
 
 const Cart = () => {
   const { cart, removeFromCart, updateQuantity, getTotalPrice } = useCart();
+  const imagePath = process.env.REACT_APP_IMAGE_PATH || '/image';
 
   if (cart.length === 0) {
     return (
       <Container className="py-5 text-center">
         <FiShoppingBag size={80} className="text-muted mb-4" />
         <h2 className="fw-bold">Ваш кошик порожній</h2>
+        <p className="text-muted">Додайте товари з каталогу</p>
         <Button as={Link} to="/shop" className="mt-3 px-5 py-2" variant="success" style={{ backgroundColor: '#1a4332' }}>
-          До покупок
+          Перейти до покупок
         </Button>
       </Container>
     );
@@ -40,14 +42,13 @@ const Cart = () => {
                   <td>
                     <div className="d-flex align-items-center">
                       <img 
-                        // ВИПРАВЛЕНО: додаємо /image/ перед назвою файлу з бази
-                        src={`/image/${item.image}`} 
+                        src={`${imagePath}/${item.image}`} 
                         alt={item.name} 
                         style={{ width: '55px', height: '55px', objectFit: 'contain', borderRadius: '8px' }} 
                         className="me-3"
                         onError={(e) => { 
-                          e.target.src = '/image/logo192.png'; 
                           e.target.onerror = null; 
+                          e.target.src = 'https://via.placeholder.com/55?text='; 
                         }} 
                       />
                       <div>
@@ -82,13 +83,13 @@ const Cart = () => {
         </Col>
         <Col lg={4}>
           <Card className="p-4 border-0 shadow-sm rounded-4">
-            <h4 className="fw-bold mb-4">Разом</h4>
+            <h4 className="fw-bold mb-4">Разом до сплати</h4>
             <div className="d-flex justify-content-between mb-4 fs-5">
-              <span>Сума:</span>
+              <span>Загальна сума:</span>
               <span className="fw-bold text-success">{getTotalPrice()} ₴</span>
             </div>
             <Button as={Link} to="/checkout" variant="success" size="lg" className="w-100 py-3 rounded-pill fw-bold" style={{ backgroundColor: '#1a4332', border: 'none' }}>
-              Оформити
+              Оформити замовлення
             </Button>
           </Card>
         </Col>

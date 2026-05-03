@@ -1,37 +1,35 @@
+// src/pages/Home.js
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Card, Button, Badge } from 'react-bootstrap';
+import { Container, Row, Col, Card, Button, Badge, Spinner } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { FiShield, FiTruck, FiHeart } from 'react-icons/fi'; // FiArrowRight видалено
-import { collection, getDocs } from 'firebase/firestore';
-import { db } from '../firebase';
+import { FiShield, FiTruck, FiHeart } from 'react-icons/fi';
+import { useProducts } from '../hooks/useProducts';
 
 const Home = () => {
+  const { products, loading } = useProducts();   // loading залишаємо
   const [popularProducts, setPopularProducts] = useState([]);
   const imagePath = process.env.REACT_APP_IMAGE_PATH || '/image';
 
   useEffect(() => {
-    const fetchPopular = async () => {
-      try {
-        const snapshot = await getDocs(collection(db, "products"));
-        const all = snapshot.docs.map(doc => ({
-          ...doc.data(),
-          id: doc.id
-        }));
+    if (products.length > 0) {
+      const cosmetic = products.filter(p => p.category === "Доглядова косметика");
+      setPopularProducts(cosmetic.length >= 3 ? cosmetic.slice(0, 3) : products.slice(0, 3));
+    }
+  }, [products]);
 
-        const cosmetic = all.filter(p => p.category === "Доглядова косметика");
-        setPopularProducts(cosmetic.length >= 3 ? cosmetic.slice(0, 3) : all.slice(0, 3));
-      } catch (err) {
-        console.error("Помилка завантаження товарів", err);
-      }
-    };
-
-    fetchPopular();
-  }, []);
+  if (loading) {
+    return (
+      <Container className="py-5 text-center">
+        <Spinner animation="border" variant="success" />
+        <p className="mt-3">Завантаження популярних товарів...</p>
+      </Container>
+    );
+  }
 
   return (
     <div style={{ backgroundColor: '#f9f9f7' }}>
 
-      {/* ========== HERO ========== */}
+      {/* головний надпис  */}
       <section 
         style={{ 
           minHeight: '95vh', 
@@ -92,7 +90,7 @@ const Home = () => {
         </Container>
       </section>
 
-      {/* ========== ПЕРЕВАГИ ========== */}
+      {/* переваги */}
       <Container className="py-5">
         <Row className="g-5 text-center">
           {[
@@ -121,7 +119,7 @@ const Home = () => {
         </Row>
       </Container>
 
-      {/* ========== ПОПУЛЯРНІ ТОВАРИ ========== */}
+      {/* популярні товари*/}
       <Container className="py-5 bg-white">
         <div className="d-flex justify-content-between align-items-end mb-5">
           <div>
@@ -175,7 +173,7 @@ const Home = () => {
         </Row>
       </Container>
 
-      {/* ========== CTA ========== */}
+      {/* запитання */}
       <section className="py-5 text-center text-white" style={{ backgroundColor: '#132f23' }}>
         <Container>
           <h2 className="display-5 fw-bold mb-3">Маєте питання?</h2>

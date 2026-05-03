@@ -16,19 +16,17 @@ const ProductCard = ({ product }) => {
     <Card className="h-100 product-card shadow-sm border-0 overflow-hidden">
       <div className="position-relative overflow-hidden">
         <Card.Img variant="top" src={product.image} className="card-image" />
-        <Badge 
-          bg="light" 
-          text="dark" 
-          className="position-absolute top-0 end-0 m-3 shadow-sm border"
-        >
+        <Badge bg="light" text="dark" className="position-absolute top-0 end-0 m-3 shadow-sm border">
           {product.category}
         </Badge>
       </div>
+      
       <Card.Body className="d-flex flex-column p-4">
         <Card.Title className="h5 fw-bold mb-2">{product.name}</Card.Title>
         <Card.Text className="text-muted small flex-grow-1">
-          {product.description.substring(0, 80)}...
+          {product.description?.substring(0, 80) || product.desc?.substring(0, 80)}...
         </Card.Text>
+        
         <div className="d-flex justify-content-between align-items-center mt-3">
           <span className="h5 mb-0 fw-bold text-success">{product.price} грн</span>
           <Button 

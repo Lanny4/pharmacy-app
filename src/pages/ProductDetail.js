@@ -1,47 +1,27 @@
-import React, { useEffect, useState } from 'react';
+// src/pages/ProductDetail.js
+import React from 'react';
 import { Container, Row, Col, Button, Badge } from 'react-bootstrap';
-import { useParams, Link, useNavigate } from 'react-router-dom';
-import { doc, getDoc } from 'firebase/firestore';
-import { db } from '../firebase';
+import { useParams, Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { toast } from 'react-toastify';
 import { FiArrowLeft, FiPlus } from 'react-icons/fi';
+import { useProduct } from '../hooks/useProducts';
 
 const ProductDetail = () => {
   const { id } = useParams();
-  const [product, setProduct] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const { product, loading, error } = useProduct(id);
   const { addToCart } = useCart();
-  const navigate = useNavigate();
   const imagePath = process.env.REACT_APP_IMAGE_PATH || '/image';
 
-  useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        const docRef = doc(db, "products", id);
-        const docSnap = await getDoc(docRef);
-
-        if (docSnap.exists()) {
-          setProduct({ ...docSnap.data(), id: docSnap.id });
-        } else {
-          navigate('/shop');
-        }
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProduct();
-  }, [id, navigate]);
-
   const handleAdd = () => {
-    addToCart(product);
-    toast.success(`${product.name} додано до кошика!`);
+    if (product) {
+      addToCart(product);
+      toast.success(`${product.name} додано до кошика!`);
+    }
   };
 
   if (loading) return <Container className="py-5 text-center"><h4>Завантаження...</h4></Container>;
+  if (error || !product) return <Container className="py-5 text-center"><h4>Товар не знайдено</h4></Container>;
 
   return (
     <Container className="py-5">
