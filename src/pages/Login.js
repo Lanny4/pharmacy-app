@@ -11,7 +11,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
 
-  const { login, loginWithGoogle } = useAuth();
+  const { login, signInWithGoogle } = useAuth();
   const navigate = useNavigate();
 
   // вхід через email/пароль
@@ -34,7 +34,7 @@ const Login = () => {
     try {
       setError('');
       setGoogleLoading(true);
-      await loginWithGoogle();
+      await signInWithGoogle();
       navigate('/profile');
     } catch (err) {
       setError('Не вдалося увійти через Google. Спробуйте ще раз.');
