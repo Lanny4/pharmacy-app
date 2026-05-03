@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { Container, Row, Col, Card, Button, Badge } from 'react-bootstrap';
-import { Link } from 'react-router-dom';                    // ← додай цей імпорт
+import { Container, Row, Col, Card, Button, Badge, Pagination } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { toast } from 'react-toastify';
 import { FiSearch, FiPlus, FiCheck } from 'react-icons/fi';
 import { useProducts } from '../hooks/useProducts';
+
+const ITEMS_PER_PAGE = 8;
 
 const Shop = () => {
   const { products, loading } = useProducts();
@@ -12,6 +14,7 @@ const Shop = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('Усі категорії');
   const [addedId, setAddedId] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const { addToCart } = useCart();
   const imagePath = process.env.REACT_APP_IMAGE_PATH || '/image';
@@ -21,6 +24,29 @@ const Shop = () => {
     const matchesCategory = selectedCategory === 'Усі категорії' || p.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
+
+  // пагінація
+  const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE);
+  const paginatedProducts = filteredProducts.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
+
+  const paginate = (page) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // скидаємо сторінку при зміні фільтрів
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+    setCurrentPage(1);
+  };
+
+  const handleCategory = (e) => {
+    setSelectedCategory(e.target.value);
+    setCurrentPage(1);
+  };
 
   const categories = ['Усі категорії', ...new Set(products.map(p => p.category))];
 
@@ -45,7 +71,7 @@ const Shop = () => {
             placeholder="Пошук ліків або косметики..."
             className="form-control ps-5 py-3 rounded-4 border-0 shadow-sm"
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={handleSearch}
           />
         </div>
 
@@ -53,7 +79,7 @@ const Shop = () => {
           className="form-select py-3 rounded-4 border-0 shadow-sm"
           style={{ maxWidth: '230px' }}
           value={selectedCategory}
-          onChange={(e) => setSelectedCategory(e.target.value)}
+          onChange={handleCategory}
         >
           {categories.map(cat => (
             <option key={cat} value={cat}>{cat}</option>
@@ -69,74 +95,97 @@ const Shop = () => {
           <p className="mt-2 text-muted">Завантажуємо ліки...</p>
         </div>
       ) : (
-        <Row className="g-4">
-          {filteredProducts.length > 0 ? (
-            filteredProducts.map(p => (
-              <Col key={p.id} sm={6} md={4} lg={3}>
-                <Card className="h-100 border-0 shadow-sm rounded-4 overflow-hidden product-card">
-                  
-                  {/* клікабельність карток*/}
-                  <Link to={`/product/${p.id}`} className="text-decoration-none">
-                    <div className="position-relative bg-light overflow-hidden" style={{ height: '220px' }}>
-                      <img 
-                        src={`${imagePath}/${p.image}`} 
-                        alt={p.name}
-                        className="w-100 h-100 p-3"
-                        style={{ objectFit: 'contain', transition: 'transform 0.4s ease' }}
-                        onError={(e) => {
-                          e.target.onerror = null;
-                          e.target.src = 'https://via.placeholder.com/200?text=Medicine';
-                        }}
-                      />
-                    </div>
+        <>
+          <Row className="g-4">
+            {paginatedProducts.length > 0 ? (
+              paginatedProducts.map(p => (
+                <Col key={p.id} sm={6} md={4} lg={3}>
+                  <Card className="h-100 border-0 shadow-sm rounded-4 overflow-hidden product-card">
+                    
+                    <Link to={`/product/${p.id}`} className="text-decoration-none">
+                      <div className="position-relative bg-light overflow-hidden" style={{ height: '220px' }}>
+                        <img 
+                          src={`${imagePath}/${p.image}`} 
+                          alt={p.name}
+                          className="w-100 h-100 p-3"
+                          style={{ objectFit: 'contain', transition: 'transform 0.4s ease' }}
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = 'https://via.placeholder.com/200?text=Medicine';
+                          }}
+                        />
+                      </div>
 
-                    <Card.Body className="d-flex flex-column p-4">
-                      <Badge bg="success" className="mb-3 align-self-start opacity-75">
-                        {p.category}
-                      </Badge>
-                      
-                      <Card.Title className="fw-bold mb-1 fs-5 text-truncate text-dark">
-                        {p.name}
-                      </Card.Title>
-                      <p className="text-muted small mb-4" style={{ height: '40px', overflow: 'hidden' }}>
-                        {p.sub}
-                      </p>
-                    </Card.Body>
-                  </Link>
+                      <Card.Body className="d-flex flex-column p-4">
+                        <Badge bg="success" className="mb-3 align-self-start opacity-75">
+                          {p.category}
+                        </Badge>
+                        
+                        <Card.Title className="fw-bold mb-1 fs-5 text-truncate text-dark">
+                          {p.name}
+                        </Card.Title>
+                        <p className="text-muted small mb-4" style={{ height: '40px', overflow: 'hidden' }}>
+                          {p.sub}
+                        </p>
+                      </Card.Body>
+                    </Link>
 
-                  {/* нижня частина з ціною та кнопкою */}
-                  <div className="px-4 pb-4 mt-auto">
-                    <div className="d-flex justify-content-between align-items-center">
-                      <span className="fs-4 fw-bold" style={{ color: '#bc544b' }}>
-                        {p.price} ₴
-                      </span>
-                      <Button
-                        style={{ 
-                          backgroundColor: '#1a4332', 
-                          border: 'none', 
-                          width: '48px', 
-                          height: '48px', 
-                          borderRadius: '12px'
-                        }}
-                        onClick={(e) => {
-                          e.preventDefault();     // Важливо! щоб не переходило по посиланню
-                          handleAdd(p);
-                        }}
-                      >
-                        {addedId === p.id ? <FiCheck size={22} /> : <FiPlus size={22} />}
-                      </Button>
+                    <div className="px-4 pb-4 mt-auto">
+                      <div className="d-flex justify-content-between align-items-center">
+                        <span className="fs-4 fw-bold" style={{ color: '#bc544b' }}>
+                          {p.price} ₴
+                        </span>
+                        <Button
+                          style={{ 
+                            backgroundColor: '#1a4332', 
+                            border: 'none', 
+                            width: '48px', 
+                            height: '48px', 
+                            borderRadius: '12px'
+                          }}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleAdd(p);
+                          }}
+                        >
+                          {addedId === p.id ? <FiCheck size={22} /> : <FiPlus size={22} />}
+                        </Button>
+                      </div>
                     </div>
-                  </div>
-                </Card>
-              </Col>
-            ))
-          ) : (
-            <div className="text-center py-5">
-              <h3>Товарів не знайдено</h3>
-              <p className="text-muted">Спробуйте змінити запит або категорію</p>
-            </div>
+                  </Card>
+                </Col>
+              ))
+            ) : (
+              <div className="text-center py-5">
+                <h3>Товарів не знайдено</h3>
+                <p className="text-muted">Спробуйте змінити запит або категорію</p>
+              </div>
+            )}
+          </Row>
+
+          {/* пагінація */}
+          {totalPages > 1 && (
+            <Pagination className="justify-content-center mt-5">
+              <Pagination.Prev 
+                disabled={currentPage === 1}
+                onClick={() => paginate(currentPage - 1)}
+              />
+              {[...Array(totalPages)].map((_, index) => (
+                <Pagination.Item
+                  key={index + 1}
+                  active={index + 1 === currentPage}
+                  onClick={() => paginate(index + 1)}
+                >
+                  {index + 1}
+                </Pagination.Item>
+              ))}
+              <Pagination.Next 
+                disabled={currentPage === totalPages}
+                onClick={() => paginate(currentPage + 1)}
+              />
+            </Pagination>
           )}
-        </Row>
+        </>
       )}
     </Container>
   );
