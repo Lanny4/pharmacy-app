@@ -10,7 +10,7 @@ const NavbarComponent = () => {
   const { cart } = useCart();
   const navigate = useNavigate();
 
-  // Логіка виходу з облікового запису
+  // логіка виходу з облікового запису
   const handleLogout = async () => {
     try {
       await logout();
@@ -28,7 +28,7 @@ const NavbarComponent = () => {
           Health<span style={{ color: '#bc544b' }}>Care</span>
         </Navbar.Brand>
         
-        {/* Бургер-меню для мобільних пристроїв */}
+        {/* меню для мобільних пристроїв */}
         <Navbar.Toggle aria-controls="main-navbar-nav" />
         
         <Navbar.Collapse id="main-navbar-nav">
@@ -39,7 +39,7 @@ const NavbarComponent = () => {
           </Nav>
           
           <Nav className="align-items-center gap-3 mt-3 mt-lg-0">
-            {/* Іконка кошика з лічильником */}
+            {/* іконка кошика з лічильником */}
             <Nav.Link as={Link} to="/cart" className="position-relative p-2">
               <FiShoppingCart size={24} />
               {cart.length > 0 && (
@@ -54,7 +54,7 @@ const NavbarComponent = () => {
               )}
             </Nav.Link>
 
-            {/* Авторизація / Кабінет */}
+            {/* авторизація і кабінет */}
             {currentUser ? (
               <NavDropdown 
                 title={
