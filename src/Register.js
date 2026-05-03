@@ -96,14 +96,14 @@ const Register = () => {
 
           <Button 
             variant="success" 
-            className="w-100 py-2 shadow-sm" 
+            className="w-100 py-2 mb-3 shadow-sm" 
             type="submit"
             disabled={loading}
           >
             {loading ? 'Реєстрація...' : 'Зареєструватися'}
           </Button>
 
-          <p className="text-center mt-3 mb-0">
+          <p className="text-center mb-0">
             Вже є профіль? <Link to="/login" className="text-success text-decoration-none fw-bold">Увійти</Link>
           </p>
         </Form>
