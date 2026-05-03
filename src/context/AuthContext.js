@@ -1,11 +1,12 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { auth, googleProvider } from '../firebase';
+import { auth } from '../firebase';
 import { 
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword, 
   signOut, 
   onAuthStateChanged,
   sendPasswordResetEmail,
+  GoogleAuthProvider,
   signInWithPopup
 } from 'firebase/auth';
 
@@ -19,6 +20,8 @@ export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const googleProvider = new GoogleAuthProvider();
+
   const signup = (email, password) => {
     return createUserWithEmailAndPassword(auth, email, password);
   };
@@ -27,8 +30,7 @@ export function AuthProvider({ children }) {
     return signInWithEmailAndPassword(auth, email, password);
   };
 
-  // ← НОВЕ: вхід через Google
-  const loginWithGoogle = () => {
+  const signInWithGoogle = () => {
     return signInWithPopup(auth, googleProvider);
   };
 
@@ -41,6 +43,7 @@ export function AuthProvider({ children }) {
       setCurrentUser(user);
       setLoading(false);
     });
+
     return unsubscribe;
   }, []);
 
@@ -48,9 +51,9 @@ export function AuthProvider({ children }) {
     currentUser,
     signup,
     login,
-    loginWithGoogle,   
     logout,
-    resetPassword
+    resetPassword,
+    signInWithGoogle   
   };
 
   return (
